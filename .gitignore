@@ -1,0 +1,21 @@
+# Output data (large FASTQ files — never commit these)
+*.fastq.gz
+*.fastq
+*.fq.gz
+*.fq
+subsamples_emobon/
+
+# CSV outputs
+samplesheet.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
