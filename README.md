@@ -30,23 +30,31 @@ sudo apt install seqtk
 
 ## Usage
 
-1. **Edit** the paths at the top of `run_scirpt.py` to match your input files:
-
-```python
-BASE_DIR = "/path/to/your/fastq/files"
-M1_R1 = os.path.join(BASE_DIR, "sample1_R1.fastq.gz")
-M1_R2 = os.path.join(BASE_DIR, "sample1_R2.fastq.gz")
-M2_R1 = os.path.join(BASE_DIR, "sample2_R1.fastq.gz")
-M2_R2 = os.path.join(BASE_DIR, "sample2_R2.fastq.gz")
-```
-
-2. **Run** the script:
+1. **Run** the script with your base directory:
 
 ```bash
-python run_scirpt.py
+python run_scirpt.py --base-dir /path/to/your/fastq/files
 ```
 
-3. **Output** will be created in `$BASE_DIR/subsamples_emobon/`:
+2. **Optionally override** specific input files or output directory:
+
+```bash
+python run_scirpt.py \
+	--base-dir /path/to/your/fastq/files \
+	--m1-r1 sample1_R1.fastq.gz \
+	--m1-r2 sample1_R2.fastq.gz \
+	--m2-r1 sample2_R1.fastq.gz \
+	--m2-r2 sample2_R2.fastq.gz \
+	--out-dir /path/to/your/fastq/files/subsamples_emobon
+```
+
+3. **Preview the plan** without writing files:
+
+```bash
+python run_scirpt.py --base-dir /path/to/your/fastq/files --dry-run
+```
+
+4. **Output** will be created in `$BASE_DIR/subsamples_emobon/` by default:
 
 ```
 subsamples_emobon/
@@ -78,6 +86,20 @@ The generated CSV follows the nf-core/mag format:
 | `BASE_DIR` | `/home/jonyb/Downloads` | Directory with input FASTQ files |
 | `OUT_DIR` | `$BASE_DIR/subsamples_emobon` | Output directory |
 | `SEED` | `12345` | Random seed for seqtk (ensures R1/R2 sync) |
+
+## New CLI features
+
+- `--fractions 10,25,50,75,90`: choose custom subsampling percentages below 100
+- `--dry-run`: validate inputs and print planned outputs without running `seqtk`
+- `--force`: overwrite existing concatenated/subsampled files
+- Input validation now fails early if one of the FASTQ files is missing
+- `seqtk` is executed without `shell=True`, reducing quoting issues and shell-injection risk
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ## Notes
 
